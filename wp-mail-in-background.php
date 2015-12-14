@@ -53,8 +53,17 @@ function queue_wp_mail( $args ) {
 		wp_schedule_single_event( time() + 1, 'dvk_process_email_queue' );
 	}
 
-	// return false to disallow sending this email now
-	return false;
+	/**
+	 * Return empty `to` and `message` values as this stops the email from being sent
+	 *
+	 * Once `wp_mail` can be short-circuited using falsey values, we can return false here.
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/35069
+	 */
+	return array(
+		'to' => '',
+		'message' => ''
+	);
 }
 
 /**
