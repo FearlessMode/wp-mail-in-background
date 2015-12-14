@@ -81,7 +81,9 @@ function process_email_queue() {
 }
 
 // scheduling
-add_filter( 'wp_mail', 'dvk\\queue_wp_mail' );
+if( ! defined( 'WP_CRON' ) || ! WP_CRON ) {
+	add_filter( 'wp_mail', 'dvk\\queue_wp_mail' );
+}
 
 // processing
 add_action( 'dvk_process_email_queue', 'dvk\\process_email_queue');
