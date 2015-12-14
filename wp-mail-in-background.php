@@ -50,7 +50,12 @@ function queue_wp_mail( $args ) {
 
 	// schedule event to process all queued emails
 	if( ! wp_next_scheduled( 'dvk_process_email_queue' ) ) {
-		wp_schedule_single_event( time() + 1, 'dvk_process_email_queue' );
+
+		// schedule event to be fired right away
+		wp_schedule_single_event( time(), 'dvk_process_email_queue' );
+
+		// send off a request to wp-cron on shutdown
+		add_action( 'shutdown', 'spawn_cron' );
 	}
 
 	/**
